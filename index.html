@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Ejemplo de AngularJS</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript">
+            // CAPA DE MODELO
+            class Persona {
+                constructor(nombre, apellido, ciudad, edad) {
+                    this.nombre = nombre;
+                    this.apellido = apellido;
+                    this.ciudad = ciudad;
+                    this.edad = edad;
+                }
+            }
+
+            class Estudiante extends Persona {
+                constructor(nombre, apellido, ciudad, edad, carrera, semestre) {
+                    super(nombre, apellido, ciudad, edad);
+                    this.carrera = carrera;
+                    this.semestre = semestre;
+                }
+            }
+
+            // CAPA DEL CONTROLADOR
+
+            var app = angular.module('SistemaAcademico', [])
+
+            app.controller('EstudianteController', ($scope, $http) => {
+                $scope.estudiante = new Estudiante()
+                $scope.estudiantes = new Array()
+
+                angular.element(document).ready(() => {
+                    console.log('La pagina se ha cargado')
+                })
+
+                $scope.agregarEstudiante = () => {
+                    /*$http({
+                        url: 'http://localhost:3000/estudiantes',
+                        method: 'POST',
+                        data: $scope.estudiante
+                    }).then((respuesta) => {
+                        console.log(respuesta)
+                    })*/
+
+                    $http({
+                        url: 'http://localhost:3000/estudiantes',
+                        method: 'POST',
+                        data: $scope.estudiante
+                    }).then(function (respuesta) {
+                        console.log(respuesta)
+                    })
+
+                }
+            })
+        </script>
+    </head>
+    <body>
+
+        <div class="container" ng-app="SistemaAcademico" ng-controller="EstudianteController">
+            <h1>Registro de estudiantes</h1>
+            <form id="dlgEstudiante" class="form container" action="#">
+                <!-- Asignar names a cada campo -->
+                <div>
+                    <label for="txtNombre" class="form-label">Nombre:</label>
+                    <input id="txtNombre" class="form-control" type="text" />
+                </div>
+                <div>
+                    <label for="txtApellido" class="form-label">Apellido:</label>
+                    <input id="txtApellido" class="form-control" type="text" />
+                </div>
+                <div>
+                    <label for="txtCiudad" class="form-label">Ciudad:</label>
+                    <input id="txtCiudad" class="form-control" type="text" />
+                </div>
+                <div>
+                    <label for="txtEdad" class="form-label">Edad:</label>
+                    <input id="txtEdad" class="form-control" type="number" />
+                </div>
+                <div>
+                    <label for="txtCarrera" class="form-label">Carrera:</label>
+                    <input id="txtCarrera" class="form-control" type="text" />
+                </div>
+                <div>
+                    <label for="txtSemestre" class="form-label">Semestre:</label>
+                    <input id="txtSemestre" class="form-control" type="number" />
+                </div>
+                <input type="submit" class="btn btn-primary" ng-click="agregarEstudiante()" value="Agregar" />
+            </form>
+            <table class="table">
+                <thead>
+                    <th>
+                        Nombre
+                    </th>
+                    <th>
+                        Apellido
+                    </th>
+                    <th>
+                        Ciudad
+                    </th>
+                    <th>
+                        Edad
+                    </th>
+                    <th>
+                        Carrera
+                    </th>
+                    <th>
+                        Semestre
+                    </th>
+                </thead>
+                <tbody id="tbEstudiantes">
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>
